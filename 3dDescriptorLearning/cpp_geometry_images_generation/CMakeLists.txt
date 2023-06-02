@@ -5,4 +5,4 @@ project(GIGen)
 # Note, replace these directories with the correct paths on your system
 include_directories( ${CMAKE_CURRENT_LIST_DIR}\\include )
 include_directories( C:\\dev\\OpenMesh-6.3\\include ) # OpenMesh head files directory. 
-include_directories( C:\\Program\ Fil
+include_directories( C:\\Program\ Files\\MATLAB\\MATLAB\ Runtime\\v93\\extern\\include ) # MATLAB Runtime head files direc
