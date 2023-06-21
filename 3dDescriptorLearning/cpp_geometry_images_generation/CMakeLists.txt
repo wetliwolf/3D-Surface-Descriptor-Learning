@@ -8,4 +8,5 @@ include_directories( C:\\dev\\OpenMesh-6.3\\include ) # OpenMesh head files dire
 include_directories( C:\\Program\ Files\\MATLAB\\MATLAB\ Runtime\\v93\\extern\\include ) # MATLAB Runtime head files directory. 
 
 link_directories( ${CMAKE_CURRENT_LIST_DIR}\\lib ) 
-link_directories( C:\\dev\\Op
+link_directories( C:\\dev\\OpenMesh-6.3\\lib ) # OpenMesh lib files directory. 
+link_directories( C:\\Progra
