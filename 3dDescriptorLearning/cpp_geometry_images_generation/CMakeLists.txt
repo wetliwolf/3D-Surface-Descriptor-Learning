@@ -16,4 +16,8 @@ aux_source_directory( ${CMAKE_CURRENT_LIST_DIR}/src src )
 
 add_executable( ${PROJECT_NAME} ${src} )
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJEC
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
+
+  
+target_link_libraries( ${PROJECT_NAME} debug  OpenMeshCored )
+targe
