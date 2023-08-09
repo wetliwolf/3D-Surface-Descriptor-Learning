@@ -28,3 +28,5 @@ target_link_libraries( ${PROJECT_NAME} optimized OpenMeshTools )
 target_link_libraries( ${PROJECT_NAME} libeng )
 target_link_libraries( ${PROJECT_NAME} libmx )
 target_link_libraries( ${PROJECT_NAME} libmat )
+target_link_libraries( ${PROJECT_NAME} mclmcr )
+target_link_libraries( ${PROJECT_NA
