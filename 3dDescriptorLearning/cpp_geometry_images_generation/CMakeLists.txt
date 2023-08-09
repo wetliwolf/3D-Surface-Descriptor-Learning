@@ -22,4 +22,5 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT $
 target_link_libraries( ${PROJECT_NAME} debug  OpenMeshCored )
 target_link_libraries( ${PROJECT_NAME} debug  OpenMeshToolsd )
 
-target_link_libraries(
+target_link_libraries( ${PROJECT_NAME} optimized OpenMeshCore )
+target_link_libraries( ${PROJECT_NAME} 
