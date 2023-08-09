@@ -23,4 +23,7 @@ target_link_libraries( ${PROJECT_NAME} debug  OpenMeshCored )
 target_link_libraries( ${PROJECT_NAME} debug  OpenMeshToolsd )
 
 target_link_libraries( ${PROJECT_NAME} optimized OpenMeshCore )
-target_link_libraries( ${PROJECT_NAME} 
+target_link_libraries( ${PROJECT_NAME} optimized OpenMeshTools )
+
+target_link_libraries( ${PROJECT_NAME} libeng )
+target_li
