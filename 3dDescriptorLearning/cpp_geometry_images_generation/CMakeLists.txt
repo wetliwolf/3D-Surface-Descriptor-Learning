@@ -36,4 +36,4 @@ target_link_libraries( ${PROJECT_NAME} libcompcur )
 add_definitions( -D_USE_MATH_DEFINES )
 
 # set(CMAKE_CXX_FLAGS_DEBUG   "-O0" )            
-# set(CMAKE_CXX_FLAG
+# set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG " )   
