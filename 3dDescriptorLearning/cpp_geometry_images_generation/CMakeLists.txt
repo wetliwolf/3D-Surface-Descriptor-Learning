@@ -33,4 +33,7 @@ target_link_libraries( ${PROJECT_NAME} mclmcrrt )
 target_link_libraries( ${PROJECT_NAME} libcompcur )
 
 
-add_definitions( -D_USE_MATH_D
+add_definitions( -D_USE_MATH_DEFINES )
+
+# set(CMAKE_CXX_FLAGS_DEBUG   "-O0" )            
+# set(CMAKE_CXX_FLAG
