@@ -137,3 +137,91 @@ namespace GIGen {
   //Implementation of setSource
   template<class Mesh>
     void
+    Generator<Mesh>::setSource(const Point& point, int face_idx)
+    {
+
+      const real proximity_threshold = 10e-5;
+
+      //Fetch nodes of the face
+      std::vector<int> nodes;
+      FaceHandle face = mesh_.face_handle(face_idx);
+      HalfedgeHandle heh = mesh_.halfedge_handle(face);
+      HalfedgeHandle start = heh;
+      do {
+        VertexHandle vh = mesh_.to_vertex_handle(heh);
+        nodes.push_back(vh.idx());
+        heh = mesh_.next_halfedge_handle(heh);
+      } while(heh != start);
+
+      //Is the source on a node?
+      for(int i = 0; i < nodes.size(); i++) {
+        VertexHandle vh = mesh_.vertex_handle(nodes[i]);
+        const Point& np = mesh_.point(vh);
+        
+        if(np.dist(point) < proximity_threshold) {
+          setNodeSource(nodes[i]);
+          return;
+        }
+      }
+
+      //Assume the source is on the face
+      setFaceSource(point, face_idx);
+      return;
+
+    }
+
+  //Implementation of setNodeSource
+  template<class Mesh>
+    void
+    Generator<Mesh>::setNodeSource(int node_idx)
+    {
+      //Clear distances, angles and gamma
+      initialize();
+
+      //Initialize source node
+      distances_[node_idx] = 0;
+      angles_[node_idx] = 0;
+
+      //Find gamma, walk along the 1-ring around source
+      VertexHandle source = mesh_.vertex_handle(node_idx);
+      HalfedgeHandle heh = mesh_.halfedge_handle(source);
+      
+      if(mesh_.is_boundary(source)) {
+        //Skip anticlockwise around source until heh is the last non-boundary halfedge
+        HalfedgeHandle b = mesh_.opposite_halfedge_handle(heh);
+        while(!mesh_.is_boundary(b)) {
+          heh = mesh_.next_halfedge_handle(b);
+          b = mesh_.opposite_halfedge_handle(heh);
+        }
+      }
+
+      HalfedgeHandle start = heh;
+      VertexHandle to;
+
+      //Traverse all halfedges pointing into source
+      do {
+        heh = mesh_.next_halfedge_handle(heh);
+        to = mesh_.to_vertex_handle(heh);
+
+        //Traverse all nodes on the edge of this face, except source and first anticlockwise neighhbour
+        while (to != source) {
+          gamma_.push_back(to.idx());
+          heh = mesh_.next_halfedge_handle(heh);
+          to = mesh_.to_vertex_handle(heh);
+        } 
+        //heh is now pointing to source
+        heh = mesh_.opposite_halfedge_handle(heh);
+
+      } while(heh != start);
+
+      Point source_pt = mesh_.point(source);
+
+      //Initialize gamma with distances and angles
+      real phitot = initializeGamma(source_pt);
+
+      if(!mesh_.is_boundary(source)) {
+        //Scale angles to sum to 2pi
+        const real alpha = (2*M_PI)/phitot;
+        const int num = gamma_.size();
+        for(unsigned int i = 0; i < num; i++) {
+          //Store the angle for this node
