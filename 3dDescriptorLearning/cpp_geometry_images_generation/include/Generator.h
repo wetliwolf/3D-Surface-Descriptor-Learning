@@ -65,3 +65,75 @@ namespace GIGen {
      * Set source point. The point is assumed to be either one of the
      * nodes of face_idx, or on one of the faces.
      */
+    void setSource(const Point& source, int face_idx);
+
+    /**
+     * Set source point on node node_idx.
+     */
+    void setNodeSource(int node_idx);
+
+    /**
+     * Set source on point, which lies on the face face_idx.
+     */
+    void setFaceSource(const Point& point, int face_idx);
+
+    /**
+     * Start generation of DGPC. When complete, distances and angles
+     * for the nodes in a geodesic disk with radius stopdist_ will be
+     * available with getDistance(ni) and getAngle(ni).
+     */
+    int run();
+
+    /**
+     * Get Gamma, the smallest ring of nodes connected by edges
+     * surrounding the source point.  These nodes are initialized with
+     * angles and distance after setSource is called.
+     */
+    const std::vector<int>& getGamma() { return gamma_; };
+
+    /**
+     * Get DGPC polar distance for node ni
+     */
+    real getDistance(int ni) { return distances_[ni]; };
+
+    /**
+     * Get DGPC polar angle for node ni
+     */
+    real getAngle(int ni) { return angles_[ni]; };
+
+    /**
+     * Get DGPC polar distances
+     */
+    const std::vector<real>& getDistances() { return distances_; };
+
+    /**
+     * Get DGPC polar angles
+     */
+    const std::vector<real>& getAngles() { return angles_; };
+
+
+  protected:
+    const Mesh& mesh_;
+    real eps_;
+    real stopdist_;
+
+    GIGen::Heap<real> heap_;
+
+    std::vector<real> distances_;
+    std::vector<real> angles_;
+
+    std::vector<int> gamma_;
+
+    void initialize();
+
+    real initializeGamma(const Point& point);
+
+    bool tryComputeNodeFromEdge(int node, int edge[2]);
+    real computeDistance(const Point& pt, int edge[2], real& alpha);
+    real computeAngle(int node, int edge[2], real alpha);
+
+  };
+
+  //Implementation of setSource
+  template<class Mesh>
+    void
