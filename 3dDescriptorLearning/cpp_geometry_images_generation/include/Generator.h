@@ -293,3 +293,69 @@ namespace GIGen {
             //of the two edges connected to source
             edges[0] = mesh_.to_vertex_handle(heh).idx();
             heh = mesh_.next_halfedge_handle(heh);
+            edges[1] = mesh_.to_vertex_handle(heh).idx();
+            heh = mesh_.next_halfedge_handle(heh);
+            edges[2] = mesh_.to_vertex_handle(heh).idx();
+            heh = mesh_.next_halfedge_handle(heh);
+
+            assert(edges[1] == curr);
+
+            //We can now attempt to compute DGPC from the two edges
+            // [edges[0], edges[1]] and [edges[1], edges[2]]
+
+            //We will attempt to compute DGPC for all nodes in this
+            //face (except source). Build a list of the nodes in "next".
+            next.clear();
+            next.push_back(edges[2]);
+
+            while(heh != end) {
+              next.push_back(mesh_.to_vertex_handle(heh).idx());
+              heh = mesh_.next_halfedge_handle(heh);
+            }
+
+            next.push_back(edges[0]);
+      
+            for(int i = 0; i < next.size(); i++) {
+
+              int n = next[i];
+
+              if( n != edges[0] ) {
+                //Compute distance to n over the edge [edges[0], edges[1]]
+                tryComputeNodeFromEdge(n, &edges[0]);
+              }
+
+              if( n != edges[2] ) {
+                //Compute distance to n over the edge [edges[1], edges[2]]
+                tryComputeNodeFromEdge(n, &edges[1]);
+              }
+            }
+          }
+          face = mesh_.next_halfedge_handle(face);
+        } while(face != face_start);
+      }
+  
+      return last_finished;
+    }
+
+
+  ////////////////////////////////////////////
+  // Implementation of protected methods below
+  ////////////////////////////////////////////
+
+  // Implementation of initialize
+  template<class Mesh>
+    void
+    Generator<Mesh>::initialize()
+    {
+      std::fill(distances_.begin(), distances_.end(), (std::numeric_limits<real>::max)());
+      heap_.initialize(&distances_);
+      gamma_.clear();
+    }
+
+  template<class Mesh>
+    typename Generator<Mesh>::real
+    Generator<Mesh>::initializeGamma(const Point& point)
+    {
+
+      const int num = gamma_.size();
+      real phitot = 0;
