@@ -225,3 +225,71 @@ namespace GIGen {
         const int num = gamma_.size();
         for(unsigned int i = 0; i < num; i++) {
           //Store the angle for this node
+          angles_[gamma_[i]] *= alpha;
+        }
+      }
+
+    }
+
+  //Implementation of setFaceSource
+  template<class Mesh>
+    void
+    Generator<Mesh>::setFaceSource(const Point& point, int face_idx)
+    {
+
+      //Clear distances, angles and gamma
+      initialize();
+
+      //Find gamma, the nodes of this face.
+      FaceHandle face = mesh_.face_handle(face_idx);
+      HalfedgeHandle heh = mesh_.halfedge_handle(face);
+      HalfedgeHandle start = heh;
+      do {
+        VertexHandle vh = mesh_.to_vertex_handle(heh);
+        int ni = vh.idx();
+        gamma_.push_back(ni);
+        heh = mesh_.next_halfedge_handle(heh);
+      } while(heh != start);
+
+      //Initialize gamma with distances and angles
+      initializeGamma(point);
+    }
+
+
+  //Implementation of run
+  template<class Mesh>
+    int
+    Generator<Mesh>::run()
+    {
+
+      int last_finished = -1;
+
+      int edges[3];
+      std::vector<int> next;
+
+      HalfedgeHandle heh, end;
+
+      while (!heap_.empty()) {
+    
+        int curr = heap_.getCandidate();
+        if (curr == -1) break;
+    
+        last_finished = curr;
+
+        VertexHandle curr_vertex = mesh_.vertex_handle(curr);
+
+        //Iterate halfedges pointing into current vertex (one for each
+        //face adjacent to curr)
+        HalfedgeHandle face_start = mesh_.halfedge_handle(curr_vertex);
+        HalfedgeHandle face = face_start;
+
+        do {
+          face = mesh_.opposite_halfedge_handle(face);
+          if(!mesh_.is_boundary(face)) {
+            heh = mesh_.prev_halfedge_handle(face);
+            end = heh;
+
+            //For this face, we will attempt to compute DGPC from each
+            //of the two edges connected to source
+            edges[0] = mesh_.to_vertex_handle(heh).idx();
+            heh = mesh_.next_halfedge_handle(heh);
