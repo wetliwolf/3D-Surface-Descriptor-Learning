@@ -428,3 +428,78 @@ namespace GIGen {
     typename Generator<Mesh>::real
     Generator<Mesh>::computeDistance(const Point& pt, int edge[2], real& alpha)
     {
+
+      const Point& Nk = mesh_.point(mesh_.vertex_handle(edge[0]));
+      const Point& Nj = mesh_.point(mesh_.vertex_handle(edge[1]));
+
+      const real Uk = distances_[edge[0]];
+      const real Uj = distances_[edge[1]];
+
+      const real djptsq = Nj.dist2(pt);
+      const real djpt = sqrt(djptsq);
+      const real dkptsq = Nk.dist2(pt);
+      const real dkpt = sqrt(dkptsq);
+
+      const Point ekj = Nk-Nj;
+      const real djksq = ekj.length2();
+      const real djk = sqrt(djksq);
+
+      //Stable evaluation of Herons formula
+      //using namespace std; //For max and min
+      const real a = (std::max)(djk, (std::max)(Uj, Uk));
+      const real c = (std::min)(djk, (std::min)(Uj, Uk));
+      real b;
+      if(a == djk) {
+        b = (std::max)(Uj, Uk);
+      } else if(a == Uj) {
+        b = (std::max)(djk, Uk);
+      } else if(a == Uk) {
+        b = (std::max)(djk, Uj);
+      }
+
+      const real H_under_root = ( (a + (b+c)) *
+                                  (c - (a-b)) *
+                                  (c + (a-b)) *
+                                  (a + (b-c)) );
+
+      if(H_under_root < 0 || djk < 10e-12) {
+        // Triangle inequality fails, return Dijkstra instead
+        const real dijkstra_j = Uj + Nj.dist(pt);
+        const real dijkstra_k = Uk + Nk.dist(pt);
+        if(dijkstra_j < dijkstra_k) {
+          alpha = 0;
+          return dijkstra_j;
+        } else {
+          alpha = 1;
+          return dijkstra_k;
+        }
+      }
+
+
+      const real H = sqrt( H_under_root );
+
+      const Point ej = Nj-pt;
+      const Point ek = Nk-pt;
+
+      const real A2 = ej.crossProd(ek).length();
+
+      const real ej_ekj = ej * ekj;
+      const real ek_ekj = ek * ekj;
+
+      const real f31 = djksq - (Uj-Uk)*(Uj-Uk);
+      const real f32 = (Uj+Uk)*(Uj+Uk) - djksq;
+
+      const real f3 = f31*f32; // ( djksq - (Uj-Uk)*(Uj-Uk) ) * ( (Uj+Uk)*(Uj+Uk) - djksq );
+
+      const real Ujsq = Uj*Uj;
+      const real Uksq = Uk*Uk;
+
+      const real f1_j = A2 * (djksq + Uksq - Ujsq);
+      const real f1_k = A2 * (djksq + Ujsq - Uksq);
+
+      const real xj = (f1_j + ek_ekj*H);
+      const real xk = (f1_k - ej_ekj*H);
+
+      if(xj < 0 || xk < 0) {
+        // Update from outside triangle, return Dijkstra instead
+        const real dijkstra_j = Uj + Nj.dist(pt);
