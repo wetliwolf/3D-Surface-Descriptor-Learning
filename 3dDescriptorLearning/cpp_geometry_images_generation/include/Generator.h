@@ -503,3 +503,54 @@ namespace GIGen {
       if(xj < 0 || xk < 0) {
         // Update from outside triangle, return Dijkstra instead
         const real dijkstra_j = Uj + Nj.dist(pt);
+        const real dijkstra_k = Uk + Nk.dist(pt);
+        if(dijkstra_j < dijkstra_k) {
+          alpha = 0;
+          return dijkstra_j;
+        } else {
+          alpha = 1;
+          return dijkstra_k;
+        }
+      }
+
+      const real f4 = 2*A2*djksq;
+
+      real Ui = sqrt(xj*xj*djptsq + 2*xj*xk*ej*ek + xk*xk*dkptsq)/f4;
+
+      const real cos_jk = (  Ujsq+Uksq - djksq)/(2*Uj*Uk);
+      const real cos_ji  = ( Ujsq+Ui*Ui - djptsq)/(2*Uj*Ui);
+      alpha = acos(cos_ji) /  acos (cos_jk);
+
+      return Ui;
+
+    }
+
+  template<class Mesh>
+    typename Generator<Mesh>::real
+    Generator<Mesh>::computeAngle(int node, int edge[2], real alpha)
+    {
+      real nkphi = angles_[edge[0]];
+      real njphi = angles_[edge[1]];
+
+      const real diff = fabs(njphi-nkphi);
+
+      if(diff < eps_)
+        return njphi;
+
+      if(diff > M_PI) {
+        //Make the interpolation modulo 2pi
+        if(njphi < nkphi) njphi += 2*M_PI;
+        else nkphi += 2*M_PI;
+      }
+      
+      real angle = (1-alpha) * njphi  + alpha * nkphi;
+      
+      if(angle > 2*M_PI)
+        angle -= 2*M_PI;
+      
+      return angle;
+    }
+
+}; //End namespace GIGen
+
+#endif //DGPC_GENERATOR_H
