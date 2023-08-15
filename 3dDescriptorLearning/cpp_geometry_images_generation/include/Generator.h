@@ -359,3 +359,72 @@ namespace GIGen {
 
       const int num = gamma_.size();
       real phitot = 0;
+
+      //For each node in gamma_
+      // * Compute distances from point, store in distances_
+      // * Compute angles spanned in point, store in angles_
+      // * Insert node in heap
+      // return total sum of angles spanned in point.
+      for(int i = 0; i < num; i++) {
+
+        int ni = gamma_[i];
+
+        VertexHandle nbvh = mesh_.vertex_handle(ni);
+        const Point& nb = mesh_.point(nbvh);
+        real dist = (point-nb).length();
+        distances_[ni] = dist;
+
+        int ip = i+1;
+        if(ip >= num) ip = 0;
+        int nip = gamma_[ip];
+        VertexHandle nbvhp = mesh_.vertex_handle(nip);
+        const Point& nbp = mesh_.point(nbvhp);
+
+        const Point nb_t =  (nb  - point).normalize();
+        const Point nbp_t = (nbp - point).normalize();
+        real cos_phi = nb_t * nbp_t;
+        real phi = acos(cos_phi);
+
+        angles_[ni] = phitot;
+
+        heap_.push(ni);
+
+        phitot += phi;
+
+      }
+
+      return phitot;
+    }
+
+  
+  //Implementation of tryComputeNodeFromEdge
+  template<class Mesh>
+    bool
+    Generator<Mesh>::tryComputeNodeFromEdge(int node, int edge[2])
+    {
+      real  thresh = 1.0+eps_;
+      real alpha;
+
+      VertexHandle h = mesh_.vertex_handle(node);
+      const Point& pt = mesh_.point(h);
+
+      real newdist = computeDistance(pt, edge, alpha); 
+
+      if (distances_[node]/newdist > thresh) {
+        //Store new distance, and compute angle
+        distances_[node] = newdist;
+        angles_[node] = computeAngle(node, edge, alpha);
+	    
+        if(newdist < stopdist_) {
+          heap_.push(node);
+        }
+        return true;
+      }
+      return false;
+    }
+
+  //Implementation of computeNodeFromEdge
+  template<class Mesh>
+    typename Generator<Mesh>::real
+    Generator<Mesh>::computeDistance(const Point& pt, int edge[2], real& alpha)
+    {
