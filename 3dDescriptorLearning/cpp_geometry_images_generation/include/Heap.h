@@ -5,4 +5,5 @@
  * More info:
  *   http://folk.uio.no/eivindlm/dgpc/
  *
- * Authors: Eivind 
+ * Authors: Eivind Lyche Melvær and Martin Reimers
+ * Centre of Mathematics and Department of Informati
