@@ -8,4 +8,9 @@
  * Authors: Eivind Lyche Melvær and Martin Reimers
  * Centre of Mathematics and Department of Informatics
  * University of Oslo, Norway, 2012
- *************************************
+ ************************************************************/
+#ifndef DGPC_HEAP_H
+#define DGPC_HEAP_H
+
+#include <queue>
+#
