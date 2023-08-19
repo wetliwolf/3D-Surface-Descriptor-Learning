@@ -6,4 +6,6 @@
  *   http://folk.uio.no/eivindlm/dgpc/
  *
  * Authors: Eivind Lyche Melvær and Martin Reimers
- * Centre of Mathematics and Department of Informati
+ * Centre of Mathematics and Department of Informatics
+ * University of Oslo, Norway, 2012
+ *************************************
