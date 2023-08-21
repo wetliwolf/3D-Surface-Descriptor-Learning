@@ -27,4 +27,5 @@ public:
   HeapNode( int idx, real key) { idx_ = idx; key_ = key;}
   ~HeapNode(){}
 
-  bool operator >  ( const HeapNod
+  bool operator >  ( const HeapNode<real>& x) const { return (this->key_ >  x.key_);}
+  bool operat
