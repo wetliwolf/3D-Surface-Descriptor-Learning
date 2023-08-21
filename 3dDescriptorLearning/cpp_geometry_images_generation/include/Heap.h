@@ -13,4 +13,9 @@
 #define DGPC_HEAP_H
 
 #include <queue>
-#
+#include <functional>
+
+namespace GIGen {
+
+template<class real>
+class HeapNode {
