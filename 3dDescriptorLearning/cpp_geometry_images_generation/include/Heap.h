@@ -24,4 +24,7 @@ public:
   int   idx_;
   real  key_;
 
-  HeapNode( int idx, real key) { i
+  HeapNode( int idx, real key) { idx_ = idx; key_ = key;}
+  ~HeapNode(){}
+
+  bool operator >  ( const HeapNod
