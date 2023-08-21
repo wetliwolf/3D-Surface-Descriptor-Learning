@@ -19,3 +19,9 @@ namespace GIGen {
 
 template<class real>
 class HeapNode {
+
+public:
+  int   idx_;
+  real  key_;
+
+  HeapNode( int idx, real key) { i
