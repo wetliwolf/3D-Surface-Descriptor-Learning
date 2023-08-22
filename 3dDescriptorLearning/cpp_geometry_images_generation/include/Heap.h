@@ -30,4 +30,10 @@ public:
   bool operator >  ( const HeapNode<real>& x) const { return (this->key_ >  x.key_);}
   bool operator >= ( const HeapNode<real>& x) const { return (this->key_ >= x.key_);}
   bool operator <  ( const HeapNode<real>& x) const { return (this->key_ <  x.key_);}
-  bool operator <= ( const HeapNode<real>& x) const { return (thi
+  bool operator <= ( const HeapNode<real>& x) const { return (this->key_ <= x.key_);}
+};
+
+template<class real>
+class Heap {
+
+  typedef std::priority
