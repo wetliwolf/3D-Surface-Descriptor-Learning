@@ -36,4 +36,8 @@ public:
 template<class real>
 class Heap {
 
-  typedef std::priority_queue< HeapNode<real>, std::vector< HeapNode<real> >, std::greater<HeapNode<real> > > Heap
+  typedef std::priority_queue< HeapNode<real>, std::vector< HeapNode<real> >, std::greater<HeapNode<real> > > Heap_t;
+
+  Heap_t heap_;
+  std::vector<bool>   flags_;
+  std::vector<real>*  ke
