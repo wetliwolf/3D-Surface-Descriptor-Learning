@@ -47,4 +47,4 @@ public:
   Heap( std::vector<real>*    keys) { initialize(keys);}
   ~Heap() {}
 
-  void initialize( std::vector<real>*    ke
+  void initialize( std::vector<real>*    keys) {	keys_ = keys; resize (keys_->size()); std::fill(flags_.begin(),
