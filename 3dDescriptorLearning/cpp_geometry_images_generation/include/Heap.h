@@ -40,4 +40,8 @@ class Heap {
 
   Heap_t heap_;
   std::vector<bool>   flags_;
-  std::vector<real>*  ke
+  std::vector<real>*  keys_;
+
+public:
+  Heap( ) { keys_ = 0; }
+  Heap( std::vector<real>*    key
