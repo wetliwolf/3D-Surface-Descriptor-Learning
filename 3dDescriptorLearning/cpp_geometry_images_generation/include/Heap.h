@@ -44,4 +44,7 @@ class Heap {
 
 public:
   Heap( ) { keys_ = 0; }
-  Heap( std::vector<real>*    key
+  Heap( std::vector<real>*    keys) { initialize(keys);}
+  ~Heap() {}
+
+  void initialize( std::vector<real>*    ke
