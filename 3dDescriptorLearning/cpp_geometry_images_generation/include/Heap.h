@@ -48,4 +48,6 @@ public:
   ~Heap() {}
 
   void initialize( std::vector<real>*    keys) {	keys_ = keys; resize (keys_->size()); std::fill(flags_.begin(),flags_.end(),false);}
-  void resize( int size) { flags_.resize(
+  void resize( int size) { flags_.resize(size); }
+  bool isInHeap( int idx) const { return flags_[idx];}
+  vo
