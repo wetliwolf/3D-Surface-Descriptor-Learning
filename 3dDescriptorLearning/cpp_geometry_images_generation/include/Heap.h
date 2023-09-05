@@ -51,4 +51,6 @@ public:
   void resize( int size) { flags_.resize(size); }
   bool isInHeap( int idx) const { return flags_[idx];}
   void removeFromHeap( int idx) { flags_[idx]=false;}
-  void push( int idx) { heap_.push(HeapNod
+  void push( int idx) { heap_.push(HeapNode<real>(idx,(*keys_)[idx])); flags_[idx]=true; }
+  bool empty () { return (top()==-1);}
+  
