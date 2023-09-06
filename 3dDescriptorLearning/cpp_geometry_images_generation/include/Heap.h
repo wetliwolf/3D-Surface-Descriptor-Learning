@@ -56,4 +56,10 @@ public:
   int  size () const { return heap_.size();}
 
   int getCandidate() {
-	if (!heap_.empty()) 
+	if (!heap_.empty()) {
+		int ret = top(); 
+		pop();
+		return ret;
+	} else 
+		return -1;
+  
