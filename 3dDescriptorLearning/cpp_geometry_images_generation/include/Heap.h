@@ -62,4 +62,8 @@ public:
 		return ret;
 	} else 
 		return -1;
-  
+  }
+
+  void pop() { 
+    while (!heap_.empty() && !isInHeap(heap_.top().idx_)) 
+ 
