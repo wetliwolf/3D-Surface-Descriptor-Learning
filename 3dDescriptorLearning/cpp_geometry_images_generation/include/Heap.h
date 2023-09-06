@@ -53,4 +53,7 @@ public:
   void removeFromHeap( int idx) { flags_[idx]=false;}
   void push( int idx) { heap_.push(HeapNode<real>(idx,(*keys_)[idx])); flags_[idx]=true; }
   bool empty () { return (top()==-1);}
-  
+  int  size () const { return heap_.size();}
+
+  int getCandidate() {
+	if (!heap_.empty()) 
