@@ -66,4 +66,6 @@ public:
 
   void pop() { 
     while (!heap_.empty() && !isInHeap(heap_.top().idx_)) 
- 
+      heap_.pop();
+    if (!heap_.empty()) { 
+      flags_[heap_.top().idx_]=fa
