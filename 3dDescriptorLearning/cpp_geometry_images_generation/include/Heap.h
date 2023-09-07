@@ -86,3 +86,4 @@ public:
 
 }; //End namespace GIGen
 
+#endif // DGPC_HEAP_H
