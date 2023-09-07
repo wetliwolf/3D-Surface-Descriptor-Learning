@@ -74,4 +74,7 @@ public:
   } 
 
   int  top() { 
-    while (!heap_.empty() && !
+    while (!heap_.empty() && !isInHeap(heap_.top().idx_)) 
+      heap_.pop();
+    if (!heap_.empty())
+  
