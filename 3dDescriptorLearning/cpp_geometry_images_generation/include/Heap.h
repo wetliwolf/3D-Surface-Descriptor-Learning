@@ -68,4 +68,10 @@ public:
     while (!heap_.empty() && !isInHeap(heap_.top().idx_)) 
       heap_.pop();
     if (!heap_.empty()) { 
-      flags_[heap_.top().idx_]=fa
+      flags_[heap_.top().idx_]=false; 
+      heap_.pop();
+    }
+  } 
+
+  int  top() { 
+    while (!heap_.empty() && !
