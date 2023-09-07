@@ -77,4 +77,12 @@ public:
     while (!heap_.empty() && !isInHeap(heap_.top().idx_)) 
       heap_.pop();
     if (!heap_.empty())
-  
+      return heap_.top().idx_;
+    else
+      return -1;
+  } 
+
+};
+
+}; //End namespace GIGen
+
