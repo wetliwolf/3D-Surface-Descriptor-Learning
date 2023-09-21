@@ -6,4 +6,6 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %
 %   Umin is the direction of minimum curvature
 %   Umax is the direction of maximum curvature
-%   Cmin is 
+%   Cmin is the minimum curvature
+%   Cmax is the maximum curvature
+%   Cmean=(Cmin+Cm
