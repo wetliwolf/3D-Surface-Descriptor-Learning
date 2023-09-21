@@ -4,4 +4,6 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %
 %   [Umin,Umax,Cmin,Cmax,Cmean,Cgauss,Normal] = compute_curvature(V,F,options);
 %
-%   Umin is the di
+%   Umin is the direction of minimum curvature
+%   Umax is the direction of maximum curvature
+%   Cmin is 
