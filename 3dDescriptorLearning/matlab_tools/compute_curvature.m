@@ -12,4 +12,5 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %   Cgauss=Cmin*Cmax
 %   Normal is the normal to the surface
 %
-%   options.curvature_sm
+%   options.curvature_smoothing controls the size of the ring used for
+%       averaging 
