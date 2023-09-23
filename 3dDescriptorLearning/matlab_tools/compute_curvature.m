@@ -8,4 +8,8 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %   Umax is the direction of maximum curvature
 %   Cmin is the minimum curvature
 %   Cmax is the maximum curvature
-%   Cmean=(Cmin+Cm
+%   Cmean=(Cmin+Cmax)/2
+%   Cgauss=Cmin*Cmax
+%   Normal is the normal to the surface
+%
+%   options.curvature_sm
