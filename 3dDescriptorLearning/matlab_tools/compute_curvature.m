@@ -13,4 +13,7 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %   Normal is the normal to the surface
 %
 %   options.curvature_smoothing controls the size of the ring used for
-%       averaging 
+%       averaging the curvature tensor.
+%
+%   The algorithm is detailed in 
+%       
