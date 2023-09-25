@@ -16,4 +16,5 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %       averaging the curvature tensor.
 %
 %   The algorithm is detailed in 
-%       
+%       David Cohen-Steiner and Jean-Marie Morvan. 
+%       Restricted Delaunay triangula
