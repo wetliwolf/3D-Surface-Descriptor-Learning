@@ -23,4 +23,7 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %   and also in
 %       Pierre Alliez, David Cohen-Steiner, Olivier Devillers, Bruno Le�vy, and Mathieu Desbrun. 
 %       Anisotropic Polygonal Remeshing. 
-%       ACM Transactions o
+%       ACM Transactions on Graphics, 2003. 
+%       Note: SIGGRAPH '2003 Conference Proceedings
+%
+%   Copy
