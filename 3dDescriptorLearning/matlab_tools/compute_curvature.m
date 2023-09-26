@@ -18,4 +18,7 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %   The algorithm is detailed in 
 %       David Cohen-Steiner and Jean-Marie Morvan. 
 %       Restricted Delaunay triangulations and normal cycle. 
-%       In Proc. 19th Annual ACM Symposium on Com
+%       In Proc. 19th Annual ACM Symposium on Computational Geometry, 
+%       pages 237-246, 2003. 
+%   and also in
+%       Pierre 
