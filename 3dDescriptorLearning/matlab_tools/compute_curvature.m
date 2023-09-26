@@ -21,4 +21,4 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %       In Proc. 19th Annual ACM Symposium on Computational Geometry, 
 %       pages 237-246, 2003. 
 %   and also in
-%       Pierre 
+%       Pierre Alliez, David Cohen-Steiner, Olivier Devillers, Bruno Le�vy, and Mathie
