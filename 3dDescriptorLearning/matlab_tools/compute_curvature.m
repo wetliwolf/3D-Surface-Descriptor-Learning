@@ -31,4 +31,8 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 orient = 1;
 
 options.curvature_smoothing = 3;
-options
+options.null = 0;
+naver = getoptions(options, 'curvature_smoothing', 3);
+
+
+[V,F] = check_fac
