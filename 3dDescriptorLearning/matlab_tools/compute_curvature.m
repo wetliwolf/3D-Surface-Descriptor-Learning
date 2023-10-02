@@ -26,4 +26,9 @@ function [Umax, Umin, Cmax, Cmin, Normal, hks, diameter] = compute_curvature(V, 
 %       ACM Transactions on Graphics, 2003. 
 %       Note: SIGGRAPH '2003 Conference Proceedings
 %
-%   Copy
+%   Copyright (c) 2007 Gabriel Peyre
+
+orient = 1;
+
+options.curvature_smoothing = 3;
+options
