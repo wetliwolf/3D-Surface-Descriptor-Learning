@@ -40,4 +40,7 @@ naver = getoptions(options, 'curvature_smoothing', 3);
 n = size(V,2);
 m = size(F,2);
 
-diameter=shape_diameter(V'
+diameter=shape_diameter(V',F');
+
+% associate each edge to a pair of faces
+i = [F(1,:) F(2,:) F(
