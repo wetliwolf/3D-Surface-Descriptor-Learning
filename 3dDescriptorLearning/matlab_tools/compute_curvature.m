@@ -51,4 +51,11 @@ s = [1:m 1:m 1:m];
 % ensure each edge appears only once
 [~,I] = unique([i;j]','rows');
 i = i(I); j = j(I); s = s(I);
-%%% END CORRE
+%%% END CORRECTED %%%
+
+% disp(size(i));
+% disp(size(j));
+% disp(size(s));
+% disp(n);
+
+A = sparse(i
