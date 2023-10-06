@@ -48,4 +48,7 @@ j = [F(2,:) F(3,:) F(1,:)];
 s = [1:m 1:m 1:m];
 
 %%% CORRECTED %%%
-% ensure eac
+% ensure each edge appears only once
+[~,I] = unique([i;j]','rows');
+i = i(I); j = j(I); s = s(I);
+%%% END CORRE
