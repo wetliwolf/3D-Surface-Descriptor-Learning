@@ -43,4 +43,9 @@ m = size(F,2);
 diameter=shape_diameter(V',F');
 
 % associate each edge to a pair of faces
-i = [F(1,:) F(2,:) F(
+i = [F(1,:) F(2,:) F(3,:)];
+j = [F(2,:) F(3,:) F(1,:)];
+s = [1:m 1:m 1:m];
+
+%%% CORRECTED %%%
+% ensure eac
