@@ -58,4 +58,6 @@ i = i(I); j = j(I); s = s(I);
 % disp(size(s));
 % disp(n);
 
-A = sparse(i
+A = sparse(i,j,s,n,n); 
+[~,~,s1] = find(A);     % direct link
+[i,j,s2] = f
