@@ -68,4 +68,7 @@ I = find( (s1>0) + (s2>0) == 2 );
 E = [s1(I) s2(I)];
 i = i(I); j = j(I);
 % only directed edges
-I
+I = find(i<j);
+E = E(I,:);
+i = i(I); j = j(I);
+ne = length(i); % number of directed
