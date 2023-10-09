@@ -64,4 +64,8 @@ A = sparse(i,j,s,n,n);
 
 I = find( (s1>0) + (s2>0) == 2 );
 
-% links edge->fa
+% links edge->faces
+E = [s1(I) s2(I)];
+i = i(I); j = j(I);
+% only directed edges
+I
