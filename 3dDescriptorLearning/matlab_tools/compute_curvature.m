@@ -60,4 +60,8 @@ i = i(I); j = j(I); s = s(I);
 
 A = sparse(i,j,s,n,n); 
 [~,~,s1] = find(A);     % direct link
-[i,j,s2] = f
+[i,j,s2] = find(A');    % reverse link
+
+I = find( (s1>0) + (s2>0) == 2 );
+
+% links edge->fa
