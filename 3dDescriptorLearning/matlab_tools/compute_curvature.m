@@ -79,3 +79,8 @@ d = sqrt(sum(e.^2,1));
 e = e ./ repmat(d,3,1);
 % avoid too large numerics
 d = d./mean(d);
+
+% normals to faces
+[Normal, normal] = compute_normal(V,F);
+
+% inner product of 
