@@ -76,4 +76,6 @@ ne = length(i); % number of directed edges
 % normalized edge
 e = V(:,j) - V(:,i);
 d = sqrt(sum(e.^2,1));
-e 
+e = e ./ repmat(d,3,1);
+% avoid too large numerics
+d = d./mean(d);
