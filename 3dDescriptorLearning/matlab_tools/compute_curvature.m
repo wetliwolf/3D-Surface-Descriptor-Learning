@@ -71,4 +71,9 @@ i = i(I); j = j(I);
 I = find(i<j);
 E = E(I,:);
 i = i(I); j = j(I);
-ne = length(i); % number of directed
+ne = length(i); % number of directed edges
+
+% normalized edge
+e = V(:,j) - V(:,i);
+d = sqrt(sum(e.^2,1));
+e 
