@@ -86,4 +86,6 @@ d = d./mean(d);
 % inner product of normals
 dp = sum( normal(:,E(:,1)) .* normal(:,E(:,2)), 1 );
 % angle un-signed
-b
+beta = acos(clamp(dp,-1,1));
+% sign
+cp = crossp( normal(:,E(:,1))', normal(:,E(:,2))' 
