@@ -83,4 +83,7 @@ d = d./mean(d);
 % normals to faces
 [Normal, normal] = compute_normal(V,F);
 
-% inner product of 
+% inner product of normals
+dp = sum( normal(:,E(:,1)) .* normal(:,E(:,2)), 1 );
+% angle un-signed
+b
