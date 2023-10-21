@@ -96,4 +96,8 @@ beta = beta .* si;
 T = zeros(3,3,ne);
 for x=1:3
     for y=1:x
-        T(x,y,:) = reshape( e(x,:).*e
+        T(x,y,:) = reshape( e(x,:).*e(y,:), 1,1,ne );
+        T(y,x,:) = T(x,y,:);
+    end
+end
+T = T.*repmat( reshape
