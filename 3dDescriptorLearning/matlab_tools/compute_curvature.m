@@ -100,4 +100,8 @@ for x=1:3
         T(y,x,:) = T(x,y,:);
     end
 end
-T = T.*repmat( reshape
+T = T.*repmat( reshape(d.*beta,1,1,ne), [3,3,1] );
+
+% do pooling on vertices
+Tv = zeros(3,3,n);
+w =
