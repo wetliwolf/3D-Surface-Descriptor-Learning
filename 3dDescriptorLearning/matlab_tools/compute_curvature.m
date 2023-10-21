@@ -88,4 +88,8 @@ dp = sum( normal(:,E(:,1)) .* normal(:,E(:,2)), 1 );
 % angle un-signed
 beta = acos(clamp(dp,-1,1));
 % sign
-cp = crossp( normal(:,E(:,1))', normal(:,E(:,2))' 
+cp = crossp( normal(:,E(:,1))', normal(:,E(:,2))' )';
+si = orient * sign( sum( cp.*e,1 ) );
+% angle signed
+beta = beta .* si;
+% tensor
