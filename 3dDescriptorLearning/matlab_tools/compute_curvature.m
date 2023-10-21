@@ -92,4 +92,8 @@ cp = crossp( normal(:,E(:,1))', normal(:,E(:,2))' )';
 si = orient * sign( sum( cp.*e,1 ) );
 % angle signed
 beta = beta .* si;
-% tensor
+% tensors
+T = zeros(3,3,ne);
+for x=1:3
+    for y=1:x
+        T(x,y,:) = reshape( e(x,:).*e
