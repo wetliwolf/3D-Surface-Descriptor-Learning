@@ -104,4 +104,7 @@ T = T.*repmat( reshape(d.*beta,1,1,ne), [3,3,1] );
 
 % do pooling on vertices
 Tv = zeros(3,3,n);
-w =
+w = zeros(1,1,n);
+for k=1:ne
+%    progressbar(k,ne);
+    Tv(:,:,i(k)) = Tv(:,
