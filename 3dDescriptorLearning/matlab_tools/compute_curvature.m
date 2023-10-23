@@ -107,4 +107,6 @@ Tv = zeros(3,3,n);
 w = zeros(1,1,n);
 for k=1:ne
 %    progressbar(k,ne);
-    Tv(:,:,i(k)) = Tv(:,
+    Tv(:,:,i(k)) = Tv(:,:,i(k)) + T(:,:,k);
+    Tv(:,:,j(k)) = Tv(:,:,j(k)) + T(:,:,k);
+    w(:,
