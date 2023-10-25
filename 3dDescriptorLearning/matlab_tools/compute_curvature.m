@@ -111,4 +111,9 @@ for k=1:ne
     Tv(:,:,j(k)) = Tv(:,:,j(k)) + T(:,:,k);
     w(:,:,i(k)) = w(:,:,i(k)) + 1;
     w(:,:,j(k)) = w(:,:,j(k)) + 1;
-e
+end
+w(w<eps) = 1;
+Tv = Tv./repmat(w,[3,3,1]);
+
+% do averaging to smooth the field
+options.ni
