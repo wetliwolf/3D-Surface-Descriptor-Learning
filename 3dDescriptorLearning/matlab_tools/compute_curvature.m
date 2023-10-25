@@ -109,4 +109,6 @@ for k=1:ne
 %    progressbar(k,ne);
     Tv(:,:,i(k)) = Tv(:,:,i(k)) + T(:,:,k);
     Tv(:,:,j(k)) = Tv(:,:,j(k)) + T(:,:,k);
-    w(:,
+    w(:,:,i(k)) = w(:,:,i(k)) + 1;
+    w(:,:,j(k)) = w(:,:,j(k)) + 1;
+e
