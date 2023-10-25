@@ -116,4 +116,8 @@ w(w<eps) = 1;
 Tv = Tv./repmat(w,[3,3,1]);
 
 % do averaging to smooth the field
-options.ni
+options.niter_averaging = naver;
+for x=1:3
+    for y=1:3
+        a = Tv(x,y,:);
+     
