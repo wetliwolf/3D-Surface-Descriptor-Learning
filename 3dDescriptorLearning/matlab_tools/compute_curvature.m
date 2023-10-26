@@ -120,4 +120,6 @@ options.niter_averaging = naver;
 for x=1:3
     for y=1:3
         a = Tv(x,y,:);
-     
+        a = perform_mesh_smoothing(F,V,a(:),options);
+        Tv(x,y,:) = reshape( a, 1,1,n );
+  
