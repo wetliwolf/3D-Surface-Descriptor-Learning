@@ -122,4 +122,9 @@ for x=1:3
         a = Tv(x,y,:);
         a = perform_mesh_smoothing(F,V,a(:),options);
         Tv(x,y,:) = reshape( a, 1,1,n );
-  
+    end
+end
+
+% extract eigenvectors and eigenvalues
+U = zeros(3,3,n);
+D = zeros(3,n);
