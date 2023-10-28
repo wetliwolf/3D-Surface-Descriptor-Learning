@@ -128,3 +128,7 @@ end
 % extract eigenvectors and eigenvalues
 U = zeros(3,3,n);
 D = zeros(3,n);
+for k=1:n
+%     if verb==1
+%         progressbar(k,n);
+%     e
