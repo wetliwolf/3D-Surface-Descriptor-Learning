@@ -131,4 +131,7 @@ D = zeros(3,n);
 for k=1:n
 %     if verb==1
 %         progressbar(k,n);
-%     e
+%     end
+    [u,d] = eig(Tv(:,:,k));
+    d = real(diag(d));
+    % sort acord
