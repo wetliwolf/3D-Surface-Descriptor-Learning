@@ -134,4 +134,7 @@ for k=1:n
 %     end
     [u,d] = eig(Tv(:,:,k));
     d = real(diag(d));
-    % sort acord
+    % sort acording to [norma,min curv, max curv]
+    [~,I] = sort(abs(d));    
+    D(:,k) = d(I);
+    U
