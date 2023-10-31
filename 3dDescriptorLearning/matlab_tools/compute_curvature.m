@@ -142,4 +142,7 @@ end
 
 Umin = squeeze(U(:,3,:));
 Umax = squeeze(U(:,2,:));
-Cmin 
+Cmin = D(2,:)';
+Cmax = D(3,:)';
+% Normal = squeeze(U(:,1,:));
+% Cmean = (Cmin+Cmax)/2
