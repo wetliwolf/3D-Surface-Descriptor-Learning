@@ -137,4 +137,9 @@ for k=1:n
     % sort acording to [norma,min curv, max curv]
     [~,I] = sort(abs(d));    
     D(:,k) = d(I);
-    U
+    U(:,:,k) = real(u(:,I));
+end
+
+Umin = squeeze(U(:,3,:));
+Umax = squeeze(U(:,2,:));
+Cmin 
