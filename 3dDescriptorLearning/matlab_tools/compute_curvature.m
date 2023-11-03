@@ -157,4 +157,7 @@ Cmin = Cmin'; Cmax = Cmax';
 
 Umin(:,I) = Umax(:,I); Umax(:,I) = Umin1(:,I);
 
-hks = OFF2HKS(off_filename, h
+hks = OFF2HKS(off_filename, hks_len)';
+
+% % try to re-orient the normals
+% normal = compute_normal(V,F
