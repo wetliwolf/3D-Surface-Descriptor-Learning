@@ -150,4 +150,7 @@ Cmax = D(3,:)';
 
 % enforce than min<max
 I = find(Cmin>Cmax);
-Cmin1 = 
+Cmin1 = Cmin; 
+Umin1 = Umin;
+Cmin(I) = Cmax(I); Cmax(I) = Cmin1(I);
+Cmin = Cmin'; Cmax
