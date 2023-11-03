@@ -153,4 +153,8 @@ I = find(Cmin>Cmax);
 Cmin1 = Cmin; 
 Umin1 = Umin;
 Cmin(I) = Cmax(I); Cmax(I) = Cmin1(I);
-Cmin = Cmin'; Cmax
+Cmin = Cmin'; Cmax = Cmax';
+
+Umin(:,I) = Umax(:,I); Umax(:,I) = Umin1(:,I);
+
+hks = OFF2HKS(off_filename, h
