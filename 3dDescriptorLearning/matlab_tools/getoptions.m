@@ -10,4 +10,11 @@ function v = getoptions(options, name, v, mendatory)
 %       v = v0;
 %   end
 %
-%   Copyright (c) 2007 Gabrie
+%   Copyright (c) 2007 Gabriel Peyre
+
+if nargin<4
+    mendatory = 0;
+end
+
+if isfield(options, name)
+    v = 
