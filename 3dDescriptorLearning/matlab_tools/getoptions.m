@@ -17,4 +17,6 @@ if nargin<4
 end
 
 if isfield(options, name)
-    v = 
+    v = eval(['options.' name ';']);
+elseif mendatory
+    error(['You have to provide optio
