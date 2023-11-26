@@ -4,4 +4,6 @@ function f = perform_mesh_smoothing(face,vertex,f,options)
 %
 %   f = perform_mesh_smoothing(face,vertex,f,options);
 %
-%   Smooth a function f
+%   Smooth a function f on a width of options.niter_averaging vertices.
+%
+%   Copyright (c) 
