@@ -6,4 +6,7 @@ function f = perform_mesh_smoothing(face,vertex,f,options)
 %
 %   Smooth a function f on a width of options.niter_averaging vertices.
 %
-%   Copyright (c) 
+%   Copyright (c) 2007 Gabriel Peyre
+
+options.null = 0;
+naver = getoptions(options, 'niter_averaging', 
