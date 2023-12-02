@@ -9,4 +9,8 @@ function f = perform_mesh_smoothing(face,vertex,f,options)
 %   Copyright (c) 2007 Gabriel Peyre
 
 options.null = 0;
-naver = getoptions(options, 'niter_averaging', 
+naver = getoptions(options, 'niter_averaging', 1);
+type = getoptions(options, 'averaging_type', 'combinatorial');
+
+if nargin<3
+    f 
