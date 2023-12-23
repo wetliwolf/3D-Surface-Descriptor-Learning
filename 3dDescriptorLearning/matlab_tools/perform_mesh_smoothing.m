@@ -13,4 +13,12 @@ naver = getoptions(options, 'niter_averaging', 1);
 type = getoptions(options, 'averaging_type', 'combinatorial');
 
 if nargin<3
-    f 
+    f = [];
+end
+if isempty(f)
+    f = vertex;
+end
+if size(f,1)<size(f,2)
+    f = f';
+end
+[vert
