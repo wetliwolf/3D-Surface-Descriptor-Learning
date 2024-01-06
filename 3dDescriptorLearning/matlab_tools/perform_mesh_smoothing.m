@@ -32,4 +32,7 @@ end
 
 n = max(face(:));
 
-% compute normalized averaging 
+% compute normalized averaging matrix
+if strcmp(type, 'combinatorial')
+    %add diagonal
+    W = trian
