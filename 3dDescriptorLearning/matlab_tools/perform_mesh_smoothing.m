@@ -25,4 +25,5 @@ end
 
 if size(f,2)>1
     for i=1:size(f,2)
-    
+        f(:,i) = perform_mesh_smoothing(face,vertex,f(:,i),options);
+    e
