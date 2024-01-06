@@ -35,4 +35,5 @@ n = max(face(:));
 % compute normalized averaging matrix
 if strcmp(type, 'combinatorial')
     %add diagonal
-    W = trian
+    W = triangulation2adjacency(face) + speye(n);
+    D = spdiags(full(sum(W,2).^(-1))
