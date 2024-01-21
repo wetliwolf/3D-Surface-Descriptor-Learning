@@ -40,4 +40,7 @@ if strcmp(type, 'combinatorial')
     W = D*W;
 else
     options.normalize=1;
-    W = compute_mesh_we
+    W = compute_mesh_weight(vertex,face,type,options);
+end
+
+% do averaging to smooth th
