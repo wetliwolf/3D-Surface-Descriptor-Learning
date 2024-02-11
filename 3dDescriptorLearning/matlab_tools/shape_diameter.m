@@ -7,4 +7,7 @@ S.surface.TRIV = T;
 S.surface.nv = size(X,1);
 
 % Shape diameter
-d = dijkstra_to_all(S.surf
+d = dijkstra_to_all(S.surface, 1);
+[~,i] = max(d);
+d = dijkstra_to_all(S.surface, i);
+diam = max(d);
