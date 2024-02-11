@@ -1,0 +1,1 @@
+function diam = shape_diameter(X,

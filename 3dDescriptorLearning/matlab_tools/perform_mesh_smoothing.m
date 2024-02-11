@@ -43,4 +43,7 @@ else
     W = compute_mesh_weight(vertex,face,type,options);
 end
 
-% do averaging to smooth th
+% do averaging to smooth the field
+for k=1:naver
+    f = W*f;
+end
