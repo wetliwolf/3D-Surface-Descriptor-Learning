@@ -154,3 +154,85 @@ class TripletNet:
     def inference(self, gi_placeholder, reuse=None):  # reuse=None is equal to reuse=False(i.e. don't reuse)
         with tf.variable_scope('model', reuse=reuse):
             tl.layers.set_name_reuse(reuse)  # reuse!
+
+            network = tl.layers.InputLayer(gi_placeholder, name='input')
+
+            """ conv2 """
+            network = Conv2d(network, n_filter=128, filter_size=(3, 3), strides=(1, 1), act=tf.identity,
+                             padding='SAME', W_init=args.conv_initializer, name='conv2_1')
+
+            network = BatchNormLayer(network, decay=0.9, epsilon=1e-4, act=args.activation,
+                                     is_train=self.is_training, name='bn2_1')
+
+            network = MaxPool2d(network, filter_size=(2, 2), strides=(2, 2),
+                                padding='SAME', name='pool2')
+
+            """ conv3 """
+            network = Conv2d(network, n_filter=256, filter_size=(3, 3), strides=(1, 1), act=tf.identity,
+                             padding='SAME', W_init=args.conv_initializer, name='conv3_1')
+
+            network = BatchNormLayer(network, decay=0.9, epsilon=1e-4, act=args.activation,
+                                     is_train=self.is_training, name='bn3_1')
+
+            network = MaxPool2d(network, filter_size=(2, 2), strides=(2, 2),
+                                padding='SAME', name='pool3')
+
+            """ conv4 """
+            network = Conv2d(network, n_filter=512, filter_size=(3, 3), strides=(1, 1), act=tf.identity,
+                             padding='SAME', W_init=args.conv_initializer, name='conv4_1')
+
+            network = BatchNormLayer(network, decay=0.9, epsilon=1e-4, act=args.activation,
+                                     is_train=self.is_training, name='bn4_1')
+
+            network = MeanPool2d(network, filter_size=(2, 2), strides=(2, 2),
+                                 padding='SAME', name='pool4')
+
+
+            network = FlattenLayer(network, name='flatten')
+            network = DenseLayer(network, n_units=512, act=tf.identity, name='fc1_relu')
+
+            network = BatchNormLayer(network, decay=0.9, epsilon=1e-4, act=args.activation,
+                                     is_train=self.is_training, name='bn_fc')
+            # network = DenseLayer(network, n_units=4096, act=args.activation, name='fc2_relu')
+            # network = DenseLayer(network, n_units=10, act=tf.identity, name='fc3_relu')
+            network = DenseLayer(network, n_units=128, act=tf.identity, name='128d_embedding')
+
+        return network
+
+
+    def build_nets(self, anchor_placeholder, positive_placeholder, negative_placeholder, anchor_label_placeholder, keypoint_num):
+        self.anchor_net = self.inference(anchor_placeholder, reuse=None)
+        self.positive_net = self.inference(positive_placeholder, reuse=True)
+        self.negative_net = self.inference(negative_placeholder, reuse=True)
+
+#         gap = tf.constant(np.float32(args.triplet_loss_gap))
+# #         zero = tf.constant(np.float32(0))
+#         zeros = tf.zeros(args.batch_size)
+
+
+        self.all_multiuse_params = self.anchor_net.all_params.copy()
+
+#         self.anchor_net.outputs = args.activation(self.anchor_net.outputs)
+
+#         self.anchor_net = DenseLayer(self.anchor_net, n_units=keypoint_num, act=tf.identity, name='feature')
+
+#         logits = self.anchor_net.outputs
+#         self.predictions = tf.nn.softmax(logits)
+#         self.cost = tl.cost.cross_entropy(output=logits, target=anchor_label_placeholder, name='cost')
+
+#         correct_prediction = tf.equal(tf.cast(tf.argmax(logits, 1), tf.int32), anchor_label_placeholder)
+#         self.acc = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='acc')
+
+
+        self.cost_same = tf.norm(self.anchor_net.outputs - self.positive_net.outputs, axis=1)
+        print(self.cost_same.shape)
+#         assert self.cost_same.shape[0] == args.batch_size
+        self.cost_diff = tf.norm(self.anchor_net.outputs - self.negative_net.outputs, axis=1)
+
+        delta_mean = tf.reduce_mean(self.cost_same - self.cost_diff)
+        cost_same_mean, cost_same_variance = tf.nn.moments(self.cost_same, axes=[0])
+        cost_diff_mean, _ = tf.nn.moments(self.cost_diff, axes=[0])
+        
+        cv = tf.sqrt(cost_same_variance)/cost_same_mean
+
+        # self.cost = tf.maximum(zero, gap + delta)
