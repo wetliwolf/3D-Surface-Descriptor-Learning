@@ -236,3 +236,94 @@ class TripletNet:
         cv = tf.sqrt(cost_same_variance)/cost_same_mean
 
         # self.cost = tf.maximum(zero, gap + delta)
+        # ratio = self.cost_diff / self.cost_same
+        # self.cost = - (gap + self.cost_diff) / (gap + self.cost_same) + self.cost_same
+
+        ratio = cost_diff_mean / cost_same_mean
+
+#         batch_variance = args.batch_size*tf.sqrt(cost_same_variance)
+
+        # self.cost = self.cost_same + tf.maximum(zero, gap - self.cost_diff) +  batch_variance
+        self.cost = tf.reduce_sum(tf.maximum(np.float32(0), np.float32(args.triplet_loss_gap) + self.cost_same - self.cost_diff)) + 0.1*args.batch_size*cv  
+
+        tf.summary.scalar(name='cost', tensor=self.cost)
+        tf.summary.scalar(name='delta_mean', tensor=delta_mean)
+        tf.summary.scalar(name='ratio', tensor=ratio)
+        tf.summary.scalar(name='cost_same_mean', tensor=cost_same_mean)
+        tf.summary.scalar(name='cost_diff_mean', tensor=cost_diff_mean)
+#         tf.summary.scalar(name='batch_variance', tensor=batch_variance)
+        tf.summary.scalar(name='CV', tensor=cv)
+        # tf.summary.scalar(name='accuracy', tensor=self.acc)
+
+        # Weight decay
+        l2 = 0
+        for p in tl.layers.get_variables_with_name('W_conv2d'):
+            l2 += tf.contrib.layers.l2_regularizer(args.l2_regularizer_scale)(p)
+            tf.summary.histogram(name=p.name, values=p)
+
+        for p in tl.layers.get_variables_with_name('128d_embedding/W'):
+            l2 += tf.contrib.layers.l2_regularizer(args.l2_regularizer_scale)(p)
+            tf.summary.histogram(name=p.name, values=p)
+
+        self.cost += l2
+
+
+        # print(len(tl.layers.get_variables_with_name('128d_embedding/W')))
+        #
+        # print('--------------------------------------------------------------------------------')
+        # print(len(listv))
+
+        # self.cost = tf.maximum(zero, gap - tf.norm(self.anchor_net.outputs - self.negative_net.outputs))
+        # self.cost = tf.maximum(zero, gap + tf.norm(self.anchor_net.outputs - self.positive_net.outputs))
+        # self.cost = tf.maximum(tf.constant(np.float32(-100000)), gap - tf.norm(self.anchor_net.outputs - self.negative_net.outputs))
+
+        # self.cost = self.cost + tl.cost.maxnorm_regularizer(1.0)(self.network.all_params)
+        # self.cost = self.cost + tf.contrib.layers.l2_regularizer(1.0)(self.anchor_net.all_params)
+
+
+# In[6]:
+
+
+args = parser.parse_args(args=['-g 2'])
+setattr(args, 'conv_initializer', tf.contrib.layers.xavier_initializer())
+setattr(args, 'activation', tl.activation.leaky_relu)
+
+os.environ['CUDA_VISIBLE_DEVICES'] = args.gpuid
+train_tfr_dir = join(args.tfr_dir, 'train')
+val_tfr_dir = join(args.tfr_dir, 'val')
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+sess = tf.InteractiveSession(config=config)
+
+if args.use_kpi_set:
+    keypoint_list = read_index_file(args.keypoints_path) # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+else:
+    keypoint_list = list(range(args.n_all_points))
+
+# debug
+
+# keypoint_list = list(range(16))
+
+keypoint_num = len(keypoint_list)
+
+# rebuild 0-based index
+keypoint_list = list(range(keypoint_num))
+
+
+# In[7]:
+
+
+def parse_and_decode(serialized_example):
+    features = tf.parse_single_example(serialized_example,
+                                       features={
+                                           'gi_raw': tf.FixedLenFeature([], tf.string),
+                                           'label': tf.FixedLenFeature([], tf.int64),
+                                       })
+
+    gi = tf.decode_raw(features['gi_raw'], tf.float32)
+    gi = tf.reshape(gi, [args.gi_size, args.gi_size, args.gi_channel])
+    label = tf.cast(features['label'], tf.int32)  # throw label tensor
+    return gi, label
+
+
+# In[8]:
