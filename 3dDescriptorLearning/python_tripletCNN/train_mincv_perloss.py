@@ -76,3 +76,81 @@ parser.add_argument('--triplet_loss_gap', default=1, type=float,
                     help='the gap value used in the triplet loss')
 parser.add_argument('--n_loss_compute_iter', default=17, type=int,
                     help='number of iterations to compute the training loss')
+# parser.add_argument('--n_test_iter', default=100, type=int,
+#                     help='number of iterations to compute the test results')
+parser.add_argument('--tfr_dir', default='/data/yqwang/Dataset/faust_256p/gi_TFRecords', 
+                    type=str, 
+                    help='directory of training TFRecords, containing' 
+                         '3 subdirectories: \"train\", \"val\", and \"test\"')
+parser.add_argument('--tfr_name_template', default=r'pidx_%04d.tfrecords', type=str, 
+                    help='name template of TFRecords filenames')
+
+global args
+
+
+# In[3]:
+
+
+def read_index_file(path, delimiter=' '):
+    """
+    Read indices from a text file and return a list of indices.
+    :param path: path of the text file.
+    :return: a list of indices.
+    """
+
+    index_list = []
+    with open(path, 'r') as text:
+
+        for line in text:
+            ls = line.strip(' {}[]\t')
+
+            if not ls or ls[0] == '#':  # Comment content
+                continue
+            ll = ls.split(delimiter)
+
+            for id_str in ll:
+                idst = id_str.strip()
+                if idst == '':
+                    continue
+                index_list.append(int(idst))
+
+    return index_list
+
+
+# In[4]:
+
+
+def append_log(path, string_stream):
+    """
+    Write string_stream in a log file.
+    :param path: path of the log file.
+    :param string_stream: string that will be write.
+    """
+
+    with open(path, 'a') as log:
+        log.write(string_stream)
+    return
+
+
+# In[5]:
+
+
+class TripletNet:
+    def __init__(self, args=None, is_training=True):
+        self.args = args
+        self.is_training = is_training
+        # self.predict_net =None
+        self.anchor_net = None  # anchor_net is also the predict_net
+        self.positive_net = None
+        self.negative_net = None
+        self.descriptors = None  # descriptors of anchors
+        self.cost = None
+        self.cost_same = None
+        self.cost_diff = None
+        self.all_multiuse_params = None
+        self.predictions = None
+        self.acc = None
+
+    def inference(self, gi_placeholder, reuse=None):  # reuse=None is equal to reuse=False(i.e. don't reuse)
+        with tf.variable_scope('model', reuse=reuse):
+            tl.layers.set_name_reuse(reuse)  # reuse!
