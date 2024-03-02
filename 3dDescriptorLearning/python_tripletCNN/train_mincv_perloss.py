@@ -554,3 +554,85 @@ for iteration in range(args.n_iteration):
     
     train_positive_gi_all = np.zeros_like(train_anchor_gi_all)
     train_negative_gi_all = np.zeros_like(train_anchor_gi_all)
+    
+    for index in range(len(train_anchor_gi_all)):
+
+        gi_same = np.asarray([target_gi for j, target_gi in enumerate(train_anchor_gi_all)
+                              if train_label_all[j] == train_label_all[index] and j != index])
+        train_positive_gi_all[index] = gi_same[np.random.choice(a=range(len(gi_same)), size=1)[0]]
+
+        gi_diff = np.asarray([target_gi for j, target_gi in enumerate(train_anchor_gi_all)
+                              if train_label_all[j] != train_label_all[index]])
+        train_negative_gi_all[index] = gi_diff[np.random.choice(a=range(len(gi_diff)), size=1)[0]]
+    
+    
+    ts = time.time()
+#     _, summary = sess.run([train_op, merged_summary],
+#                           feed_dict={anchor_placeholder: train_anchor_gi_all,
+#                                      anchor_label_placeholder: train_label_all})
+
+
+    _, summary = sess.run([train_op, merged_summary],
+                          feed_dict={anchor_placeholder: train_anchor_gi_all,
+                                     positive_placeholder: train_positive_gi_all,
+                                     negative_placeholder: train_negative_gi_all})
+
+
+    print('train time cost: %f' % (time.time() - ts))
+
+    train_writer.add_summary(summary, global_step=iteration)
+
+    if iteration % args.val_freq == 0:
+
+        ss = time.time()
+        val_anchor_gi_all = None
+        val_label_all = None
+
+        for keypoint_id in selected_keypoints:
+
+            val_gi, val_label = sess.run(val_next_element_list[keypoint_id])
+
+            if val_anchor_gi_all is None:
+                val_anchor_gi_all = val_gi
+            else:
+                val_anchor_gi_all = np.append(val_anchor_gi_all, val_gi, axis=0)
+
+            if val_label_all is None:
+                val_label_all = val_label
+            else:
+                val_label_all = np.append(val_label_all, val_label, axis=0)
+
+        print('select val tfr time cost: %f' % (time.time() - ss))
+
+        val_positive_gi_all = np.zeros_like(val_anchor_gi_all)
+        val_negative_gi_all = np.zeros_like(val_anchor_gi_all)
+
+        for index in range(len(val_anchor_gi_all)):
+            gi_same = np.asarray([target_gi for j, target_gi in enumerate(val_anchor_gi_all)
+                                  if val_label_all[j] == val_label_all[index] and j != index])
+            val_positive_gi_all[index] = gi_same[np.random.choice(a=range(len(gi_same)), size=1)[0]]
+
+            gi_diff = np.asarray([target_gi for j, target_gi in enumerate(val_anchor_gi_all)
+                                  if val_label_all[j] != val_label_all[index]])
+            val_negative_gi_all[index] = gi_diff[np.random.choice(a=range(len(gi_diff)), size=1)[0]]  
+
+
+        vs = time.time()
+    #     summary = sess.run(merged_summary, feed_dict={anchor_placeholder: val_anchor_gi_all,
+    #                                                   anchor_label_placeholder: val_label_all})
+        summary = sess.run(merged_summary, feed_dict={anchor_placeholder: val_anchor_gi_all,
+                                                      positive_placeholder: val_positive_gi_all,
+                                                      negative_placeholder: val_negative_gi_all})
+        print('val time cost: %f' % (time.time() - vs))
+
+        validation_writer.add_summary(summary, global_step=iteration)
+        
+        print('!!!!!!!!----------current iteration: %d'%iteration)
+
+
+#     if iteration == 0 or (iteration + 1) % args.print_freq == 0:
+#         # Calculate train loss and validation loss.
+#         info = 'Iteration %d of %d took %fs from last displayed iteration.' % \
+#                (iteration + 1, args.n_iteration, time.time() - start_time)
+#         log_stream += info
+#         log_stream += '\n'
