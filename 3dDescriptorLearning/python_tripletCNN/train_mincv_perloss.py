@@ -406,3 +406,66 @@ sess.run(tf.initialize_variables(set(tf.global_variables()) - temp))
 # train_op = tf.train.AdadeltaOptimizer().minimize(triplet_net.cost, var_list=train_params)
     
 triplet_net.anchor_net.print_params()
+triplet_net.anchor_net.print_layers()
+
+info = '   learning_rate: %f' % args.learning_rate
+log_stream += info
+log_stream += '\n'
+print(info)
+
+info = '   batch_size: %d' % args.batch_size
+log_stream += info
+log_stream += '\n'
+print(info)
+
+append_log(log_path, log_stream)
+log_stream = ''
+
+
+# In[9]:
+
+
+# data generator preperation
+# start_time = time.time()
+
+# train_iter_batch_list = []
+# val_iter_batch_list = []
+# test_iter_batch_list = []
+
+# for i in range(keypoint_num):
+#     train_tfrecords_path = join(train_tfr_dir, args.tfr_name_template % i)
+#     val_tfrecords_path = join(val_tfr_dir, args.tfr_name_template % i)
+# #         test_tfrecords_path = join(args.test_tfr_dir, args.tfr_name_template % i)
+
+#     train_iter_batch_list.append(
+#         tf.data.TFRecordDataset(train_tfrecords_path).map(parse_and_decode). \
+#         shuffle(args.shuffle_batch_capacity).batch(args.batch_gi_num).repeat().make_one_shot_iterator().get_next())
+
+#     val_iter_batch_list.append(
+#         tf.data.TFRecordDataset(val_tfrecords_path).map(parse_and_decode). \
+#         shuffle(args.shuffle_batch_capacity).batch(args.batch_gi_num).repeat().make_one_shot_iterator().get_next())
+    
+#     if (i + 1) % 100  == 0:
+#         print('%4d of %d are processed. ' % ((i + 1), keypoint_num))
+
+# #         test_iter_batch_list.append(
+# #             tf.data.TFRecordDataset(test_tfrecords_path).map(parse_and_decode). \
+# #             shuffle(args.shuffle_batch_capacity).batch(args.batch_gi_num).repeat().make_one_shot_iterator().get_next())
+
+# info = 'Data generator preperation costs %fs' % (time.time() - start_time)
+# log_stream += info
+# log_stream += '\n'
+# print(info)
+
+# append_log(log_path, log_stream)
+# log_stream = ''
+
+# tfr_path_placeholder = tf.placeholder(tf.string, shape=[])
+
+
+# batch_iterator = tf.data.TFRecordDataset(tfr_path_placeholder).map(parse_and_decode). \
+#                  shuffle(args.shuffle_batch_capacity).batch(args.batch_gi_num).repeat().make_initializable_iterator()
+# next_batch = batch_iterator.get_next()
+
+# setattr(args, 'n_tfr_iteration', 100)
+# setattr(args, 'tfr_batch_size', 128)
