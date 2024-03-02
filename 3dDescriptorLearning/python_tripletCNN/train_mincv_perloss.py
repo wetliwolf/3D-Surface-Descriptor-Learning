@@ -469,3 +469,88 @@ log_stream = ''
 
 # setattr(args, 'n_tfr_iteration', 100)
 # setattr(args, 'tfr_batch_size', 128)
+
+
+train_placeholder_list = []
+val_placeholder_list = []
+
+train_iter_list = []
+val_iter_list = []
+
+train_next_element_list = []
+val_next_element_list = []
+
+for keypoint_idx in range(keypoint_num):
+#     train_tfr_path = tf.placeholder(tf.string, shape=[])
+#     train_placeholder_list.append(train_tfr_path)
+    
+    train_iter = tf.data.TFRecordDataset(join(train_tfr_dir, args.tfr_name_template % keypoint_idx)).map(parse_and_decode).                  shuffle(args.shuffle_batch_capacity).batch(args.batch_gi_num).repeat().make_one_shot_iterator()
+    train_iter_list.append(train_iter)
+    
+    train_next_element = train_iter.get_next()
+    train_next_element_list.append(train_next_element)
+    
+#     val_tfr_path = tf.placeholder(tf.string, shape=[])
+#     val_placeholder_list.append(val_tfr_path)
+    
+    val_iter = tf.data.TFRecordDataset(join(val_tfr_dir, args.tfr_name_template % keypoint_idx)).map(parse_and_decode).                  shuffle(args.shuffle_batch_capacity).batch(args.batch_gi_num).repeat().make_one_shot_iterator()
+    val_iter_list.append(val_iter)
+    
+    val_next_element = val_iter.get_next()
+    val_next_element_list.append(val_next_element)
+
+
+# In[ ]:
+
+
+# training
+
+start_time = time.time()
+
+# pidx2position = dict()
+# loaded_keypoint_list = None
+
+for iteration in range(args.n_iteration):
+    
+#     if iteration % args.n_tfr_iteration == 0:
+#         ls = time.time()
+        
+#         loaded_keypoint_list = np.random.choice(a=keypoint_list, size=args.tfr_batch_size, replace=False)
+#         pidx2position.clear()
+        
+#         for n, keypoint_idx in enumerate(loaded_keypoint_list):
+#             sess.run(train_iter_list[n].initializer, feed_dict={train_placeholder_list[n]: join(train_tfr_dir, args.tfr_name_template % keypoint_idx)})
+#             sess.run(val_iter_list[n].initializer, feed_dict={val_placeholder_list[n]: join(val_tfr_dir, args.tfr_name_template % keypoint_idx)})
+#             pidx2position[keypoint_idx] = n 
+        
+#         print('loading tfr batch  time cost: %f' % (time.time() - ls))
+        
+    selected_keypoints = np.random.choice(a=keypoint_list, size=args.batch_keypoint_num, replace=False)
+
+    
+    ss = time.time()
+    train_anchor_gi_all = None
+    train_label_all = None
+
+    for keypoint_id in selected_keypoints:
+        
+       
+        train_gi, train_label = sess.run(train_next_element_list[keypoint_id])
+
+        if train_anchor_gi_all is None:
+            train_anchor_gi_all = train_gi
+        else:
+            train_anchor_gi_all = np.append(train_anchor_gi_all, train_gi, axis=0)
+
+        if train_label_all is None:
+            train_label_all = train_label
+        else:
+            train_label_all = np.append(train_label_all, train_label, axis=0)
+            
+    print('select train tfr time cost: %f' % (time.time() - ss))
+    # triplet_net.is_training = False  # compute descriptors
+
+    triplet_net.is_training = True  # train
+    
+    train_positive_gi_all = np.zeros_like(train_anchor_gi_all)
+    train_negative_gi_all = np.zeros_like(train_anchor_gi_all)
