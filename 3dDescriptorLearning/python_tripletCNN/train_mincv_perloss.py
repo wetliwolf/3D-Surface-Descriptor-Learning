@@ -636,3 +636,51 @@ for iteration in range(args.n_iteration):
 #                (iteration + 1, args.n_iteration, time.time() - start_time)
 #         log_stream += info
 #         log_stream += '\n'
+#         print(info)
+#         start_time = time.time()
+
+
+#         train_loss, train_acc = \
+#             sess.run([triplet_net.cost, triplet_net.acc],
+#                      feed_dict={anchor_placeholder: train_anchor_gi_all,
+#                                 anchor_label_placeholder: train_label_all})
+
+
+#         # Compute validation loss.
+#         # hard-mining is disabled in this part.
+#         val_loss, val_acc = \
+#             sess.run([triplet_net.cost, triplet_net.acc],
+#                      feed_dict={anchor_placeholder: val_anchor_gi_all,
+#                                 anchor_label_placeholder: val_label_all})
+
+
+#         info = '    train loss: %f' % (train_loss)
+#         log_stream += info
+#         log_stream += '\n'
+#         print(info)
+
+#         info = '    train acc: %f' % (train_acc)
+#         log_stream += info
+#         log_stream += '\n'
+#         print(info)
+
+#         info = '    validation loss: %f' % (val_loss)
+#         log_stream += info
+#         log_stream += '\n'
+#         print(info)
+
+#         info = '    validation acc: %f' % (val_acc)
+#         log_stream += info
+#         log_stream += '\n'
+#         print(info)
+
+#         append_log(log_path, log_stream)
+#         log_stream = ''
+
+    if (iteration + 1) % (args.save_freq) == 0:
+        saver_part = tf.train.Saver(triplet_net.all_multiuse_params)
+        saver_part.save(sess, join(args.model_saving_dir, 'training_model_multiuse'), global_step=iteration)
+
+        saver = tf.train.Saver()
+        saver.save(sess, join(args.model_saving_dir, 'training_model'), global_step=iteration)
+#         end
