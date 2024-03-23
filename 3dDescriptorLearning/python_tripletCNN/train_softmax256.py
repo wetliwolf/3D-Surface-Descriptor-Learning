@@ -310,3 +310,84 @@ def parse_and_decode(serialized_example):
                                            'gi_raw': tf.FixedLenFeature([], tf.string),
                                            'label': tf.FixedLenFeature([], tf.int64),
                                        })
+
+    gi = tf.decode_raw(features['gi_raw'], tf.float32)
+    gi = tf.reshape(gi, [args.gi_size, args.gi_size, args.gi_channel])
+    label = tf.cast(features['label'], tf.int32)  # throw label tensor
+    return gi, label
+
+
+# In[8]:
+
+
+run_time = time.localtime(time.time())
+
+# Placeholder setup
+# [batch_size, height, width, channels]
+anchor_placeholder = tf.placeholder(
+    dtype=tf.float32,
+    shape=[None, args.gi_size, args.gi_size, args.gi_channel])  # [batch_size, height, width, channels]
+
+positive_placeholder = tf.placeholder(
+    dtype=tf.float32,
+    shape=[None, args.gi_size, args.gi_size, args.gi_channel])  # [batch_size, height, width, channels]
+
+negative_placeholder = tf.placeholder(
+    dtype=tf.float32,
+    shape=[None, args.gi_size, args.gi_size, args.gi_channel])  # [batch_size, height, width, channels]
+
+anchor_label_placeholder = tf.placeholder(
+    dtype=tf.int32,
+    shape=[None])  # [batch_size, height, width, channels]
+
+# Build the net
+triplet_net = TripletNet(is_training=True) # training 
+
+triplet_net.build_nets(
+    anchor_placeholder=anchor_placeholder,
+    positive_placeholder=positive_placeholder,
+    negative_placeholder=negative_placeholder,
+    anchor_label_placeholder=anchor_label_placeholder,
+    keypoint_num=keypoint_num
+)
+
+train_params = triplet_net.anchor_net.all_params
+
+train_op = tf.train.AdamOptimizer(args.learning_rate, beta1=0.9, beta2=0.999,
+                                  epsilon=1e-08, use_locking=False).minimize(triplet_net.cost,
+                                                                             var_list=train_params)
+# train_op = tf.train.AdadeltaOptimizer().minimize(triplet_net.cost, var_list=train_params)
+
+# Summary for visualization.
+# tf.summary.scalar(name='cost', tensor=triplet_net.cost)
+# tf.summary.scalar(name='cost_same', tensor=triplet_net.cost_same)
+# tf.summary.scalar(name='cost_diff', tensor=triplet_net.cost_diff)
+merged_summary = tf.summary.merge_all()
+train_writer = tf.summary.FileWriter(join(args.summary_saving_dir, 'train'), sess.graph)
+validation_writer = tf.summary.FileWriter(join(args.summary_saving_dir, 'validation'), sess.graph)
+log_path = join('./', 'log_' + time.strftime('%Y-%m-%d_%H-%M-%S', run_time) + '.log')
+log_stream = 'Start running at ' + time.strftime('%Y-%m-%d %H:%M:%S', run_time) + '.\n'
+log_stream += '================================================================================\n'
+
+with open(log_path, 'w') as logf:
+    logf.write(log_stream)
+
+log_stream = ''
+
+if args.restore:
+
+    load_saver = tf.train.Saver()
+    load_saver.restore(sess, args.restore_path)
+    info = 'Restore model parameters from %s' % args.restore_path
+    log_stream += info
+    log_stream += '\n'
+    print(info)
+
+else:
+    tl.layers.initialize_global_variables(sess)
+    info = 'Successfully initialized global variables.'
+    log_stream += info
+    log_stream += '\n'
+    print(info)       
+
+triplet_net.anchor_net.print_params()
