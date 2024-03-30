@@ -391,3 +391,78 @@ else:
     print(info)       
 
 triplet_net.anchor_net.print_params()
+triplet_net.anchor_net.print_layers()
+
+info = '   learning_rate: %f' % args.learning_rate
+log_stream += info
+log_stream += '\n'
+print(info)
+
+info = '   batch_size: %d' % args.batch_size
+log_stream += info
+log_stream += '\n'
+print(info)
+
+append_log(log_path, log_stream)
+log_stream = ''
+
+
+# In[9]:
+
+
+# Prepare training data iterator from tfrecords
+ 
+train_placeholder_list = []
+val_placeholder_list = []
+
+train_iter_list = []
+val_iter_list = []
+
+train_next_element_list = []
+val_next_element_list = []
+
+for keypoint_idx in range(keypoint_num):
+#     train_tfr_path = tf.placeholder(tf.string, shape=[])
+#     train_placeholder_list.append(train_tfr_path)
+    
+    train_iter = tf.data.TFRecordDataset(join(train_tfr_dir, args.tfr_name_template % keypoint_idx)).map(parse_and_decode).                  shuffle(args.shuffle_batch_capacity).batch(args.batch_gi_num).repeat().make_one_shot_iterator()
+    train_iter_list.append(train_iter)
+    
+    train_next_element = train_iter.get_next()
+    train_next_element_list.append(train_next_element)
+    
+#     val_tfr_path = tf.placeholder(tf.string, shape=[])
+#     val_placeholder_list.append(val_tfr_path)
+    
+    val_iter = tf.data.TFRecordDataset(join(val_tfr_dir, args.tfr_name_template % keypoint_idx)).map(parse_and_decode).                  shuffle(args.shuffle_batch_capacity).batch(args.batch_gi_num).repeat().make_one_shot_iterator()
+    val_iter_list.append(val_iter)
+    
+    val_next_element = val_iter.get_next()
+    val_next_element_list.append(val_next_element)
+
+
+# In[10]:
+
+
+# Start training
+
+start_time = time.time()
+
+# pidx2position = dict()
+# loaded_keypoint_list = None
+
+for iteration in range(args.n_iteration):
+    
+
+    
+    selected_keypoints = np.random.choice(a=keypoint_list, size=args.batch_keypoint_num, replace=False)
+
+    
+    ss = time.time()
+    train_anchor_gi_all = None
+    train_label_all = None
+
+    for keypoint_id in selected_keypoints:
+        
+       
+        train_gi, train_label = sess.run(train_next_element_list[keypoint_id])
