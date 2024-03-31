@@ -559,3 +559,16 @@ for iteration in range(args.n_iteration):
 
         info = '    validation acc: %f' % (val_acc)
         log_stream += info
+        log_stream += '\n'
+        print(info)
+
+        append_log(log_path, log_stream)
+        log_stream = ''
+
+    if (iteration + 1) % (args.save_freq) == 0:
+        saver_part = tf.train.Saver(triplet_net.all_multiuse_params)
+        saver_part.save(sess, join(args.model_saving_dir, 'training_model_multiuse'), global_step=iteration)
+
+        saver = tf.train.Saver()
+        saver.save(sess, join(args.model_saving_dir, 'training_model'), global_step=iteration)
+#         end
