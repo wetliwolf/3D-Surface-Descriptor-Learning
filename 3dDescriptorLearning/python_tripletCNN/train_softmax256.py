@@ -466,3 +466,96 @@ for iteration in range(args.n_iteration):
         
        
         train_gi, train_label = sess.run(train_next_element_list[keypoint_id])
+
+        if train_anchor_gi_all is None:
+            train_anchor_gi_all = train_gi
+        else:
+            train_anchor_gi_all = np.append(train_anchor_gi_all, train_gi, axis=0)
+
+        if train_label_all is None:
+            train_label_all = train_label
+        else:
+            train_label_all = np.append(train_label_all, train_label, axis=0)
+            
+    print('select train tfr time cost: %f' % (time.time() - ss))
+    # triplet_net.is_training = False  # compute descriptors
+
+    triplet_net.is_training = True  # train
+    
+    ts = time.time()
+    _, summary = sess.run([train_op, merged_summary],
+                          feed_dict={anchor_placeholder: train_anchor_gi_all,
+                                     anchor_label_placeholder: train_label_all})
+    print('train time cost: %f' % (time.time() - ts))
+
+    train_writer.add_summary(summary, global_step=iteration)
+
+
+
+    ss = time.time()
+    val_anchor_gi_all = None
+    val_label_all = None
+
+    for keypoint_id in selected_keypoints:
+
+        val_gi, val_label = sess.run(val_next_element_list[keypoint_id])
+
+        if val_anchor_gi_all is None:
+            val_anchor_gi_all = val_gi
+        else:
+            val_anchor_gi_all = np.append(val_anchor_gi_all, val_gi, axis=0)
+
+        if val_label_all is None:
+            val_label_all = val_label
+        else:
+            val_label_all = np.append(val_label_all, val_label, axis=0)
+
+    print('select val tfr time cost: %f' % (time.time() - ss))
+    
+    
+    vs = time.time()
+    summary = sess.run(merged_summary, feed_dict={anchor_placeholder: val_anchor_gi_all,
+                                                  anchor_label_placeholder: val_label_all})
+    print('val time cost: %f' % (time.time() - vs))
+
+    validation_writer.add_summary(summary, global_step=iteration)
+
+
+    if iteration == 0 or (iteration + 1) % args.print_freq == 0:
+        # Calculate train loss and validation loss.
+        info = 'Iteration %d of %d took %fs from last displayed iteration.' %                (iteration + 1, args.n_iteration, time.time() - start_time)
+        log_stream += info
+        log_stream += '\n'
+        print(info)
+        start_time = time.time()
+
+
+        train_loss, train_acc =             sess.run([triplet_net.cost, triplet_net.acc],
+                     feed_dict={anchor_placeholder: train_anchor_gi_all,
+                                anchor_label_placeholder: train_label_all})
+
+
+        # Compute validation loss.
+        # hard-mining is disabled in this part.
+        val_loss, val_acc =             sess.run([triplet_net.cost, triplet_net.acc],
+                     feed_dict={anchor_placeholder: val_anchor_gi_all,
+                                anchor_label_placeholder: val_label_all})
+
+
+        info = '    train loss: %f' % (train_loss)
+        log_stream += info
+        log_stream += '\n'
+        print(info)
+
+        info = '    train acc: %f' % (train_acc)
+        log_stream += info
+        log_stream += '\n'
+        print(info)
+
+        info = '    validation loss: %f' % (val_loss)
+        log_stream += info
+        log_stream += '\n'
+        print(info)
+
+        info = '    validation acc: %f' % (val_acc)
+        log_stream += info
