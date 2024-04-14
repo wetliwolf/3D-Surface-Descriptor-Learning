@@ -8,4 +8,8 @@ This code represents a deep learning method for local descriptors of 3D surface 
       ECCV 2018.
       ------------------------------------------------------------
 
-An advanced variation of this method is available in [LPS](https://github.com/yiqun-wang/LPS). Please consider citing the paper mentioned above if you utilize the code or its compon
+An advanced variation of this method is available in [LPS](https://github.com/yiqun-wang/LPS). Please consider citing the paper mentioned above if you utilize the code or its components.
+
+# License
+
+This software is freely available under the GNU General Public License p
