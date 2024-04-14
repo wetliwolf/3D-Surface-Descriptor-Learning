@@ -12,4 +12,4 @@ An advanced variation of this method is available in [LPS](https://github.com/yi
 
 # License
 
-This software is freely available under the GNU General Public License p
+This software is freely available under the GNU General Public License published by the Free Software Foundation. You are free to distribute and/or modify this
