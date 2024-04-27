@@ -16,4 +16,4 @@ This software is freely available under the GNU General Public License published
 
 # Instructions
 
-Three folders exist in this repository. 
+Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geometry Image (GI) creation while the 'py
