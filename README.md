@@ -18,4 +18,4 @@ This software is freely available under the GNU General Public License published
 
 Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geometry Image (GI) creation while the 'python' folder is for network training and testing. Details of the usage is present below:
 
-1. Compile matlab project using command -- 'MCC matlab "mcc -W cpplib:libcompcur -T 
+1. Compile matlab project using command -- 'MCC matlab "mcc -W cpplib:libcompcur -T link:lib compute_curvature.m"' to get 'libcompcur.dll' which should be added to the CPP
