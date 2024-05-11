@@ -26,4 +26,6 @@ Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geome
 
 -Train network:
 
-    Run scripts i
+    Run scripts in the following sequence:
+    	'classify_gi_by_pidx_and_split.py'
+    	'tfr_gen.
