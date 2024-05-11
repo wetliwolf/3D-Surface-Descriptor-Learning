@@ -20,4 +20,5 @@ Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geome
 
 1. Compile matlab project using command -- 'MCC matlab "mcc -W cpplib:libcompcur -T link:lib compute_curvature.m"' to get 'libcompcur.dll' which should be added to the CPP project
 
-2. Build cpp solution: to generate geometry images. Modify CM
+2. Build cpp solution: to generate geometry images. Modify CMakeLists and Build solution accordingly. Run 'GIGen.exe config.ini' to generate GI.
+
