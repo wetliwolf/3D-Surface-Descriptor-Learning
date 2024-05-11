@@ -22,3 +22,4 @@ Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geome
 
 2. Build cpp solution: to generate geometry images. Modify CMakeLists and Build solution accordingly. Run 'GIGen.exe config.ini' to generate GI.
 
+3. Python project works for network training and testing. Copy the geometry i
