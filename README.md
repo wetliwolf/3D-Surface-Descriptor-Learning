@@ -28,4 +28,8 @@ Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geome
 
     Run scripts in the following sequence:
     	'classify_gi_by_pidx_and_split.py'
-    	'tfr_gen.
+    	'tfr_gen.py'
+    	'train_softmax256.py'
+    	'train_mincv_perloss.py'
+
+-Tes
