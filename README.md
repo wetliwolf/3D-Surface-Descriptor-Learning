@@ -38,4 +38,8 @@ Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geome
 
 # Contact
 
-For any questions, comments, or suggestions, feel f
+For any questions, comments, or suggestions, feel free to reach out at: wetliwolf@gmail.com
+
+October, 2018
+
+Copyright (C) 2018 
