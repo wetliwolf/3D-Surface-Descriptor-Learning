@@ -35,3 +35,7 @@ Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geome
 -Test to generate descriptor:
 
     Run 'descGen.py' to generate descriptor using test dataset.
+
+# Contact
+
+For any questions, comments, or suggestions, feel f
