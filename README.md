@@ -32,4 +32,6 @@ Three folders exist in this repository. The 'cpp' folder uses 'matlab' for Geome
     	'train_softmax256.py'
     	'train_mincv_perloss.py'
 
--Tes
+-Test to generate descriptor:
+
+    Run 'descGen.py' to generate descriptor using test dataset.
